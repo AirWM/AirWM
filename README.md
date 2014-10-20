@@ -1,7 +1,6 @@
-AirWM
-=====
+![AirWM](http://i.imgur.com/TZIgxK2.png)
 
-AirWM is a window manager for X implemented in JavaScript (node.js) using the X11 protocol.
+AirWM is a Window Manager for X implemented in JavaScript (node.js) using the X11 protocol.
 
 Contributors
 ------------
@@ -17,7 +16,11 @@ Dependencies
 ------------
 * [node-x11](https://github.com/sidorares/node-x11)
 
+**Testing Environment Dependencies**:
+* [Mocha](http://visionmedia.github.io/mocha/)
+* [should.js](https://github.com/tj/should.js)
+
 License
 -------
-
 This project uses the [Apache v2 license](/LICENSE).
+
