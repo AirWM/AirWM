@@ -1,0 +1,19 @@
+{
+	"name": "AirWM",
+	"description": "A window manager for X using the X11 protocol",
+	"version": "0.1.0",
+	"contributors": [{"name": "Martin Rogalla"},{ "name": "Harmjan Treep"},{"name": "Niels Spruit"}],
+	"homepage": "https://github.com/AirWM/AirWM",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/AirWM/AirWM"
+	},
+	"bugs": {
+		"url": "https://github.com/AirWM/AirWM/issues"
+	},
+	"private": "true",
+	"license": "Apache-2.0",
+	"dependencies": {
+		"x11": "1.0.1"
+	}
+}
