@@ -15,5 +15,12 @@
 	"license": "Apache-2.0",
 	"dependencies": {
 		"x11": "1.0.1"
-	}
+	},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }
