@@ -116,16 +116,23 @@ function Container( horizontal, x, y, width, height ) {
 	};
 }
 
-var window_tree = new Container( true, margin, margin, 800-2*margin, 600-2*margin );
+// The container tree with all the windows in it
+var window_tree;
 
 var counter = 0;
 
 x11.createClient(function(err, display) {
 	X = display.client;
 
+	window_tree = new Container( true, margin, margin, display.screen[0].pixel_width-2*margin, display.screen[0].pixel_height-2*margin );
+
 	// By adding the substructure redirect you become the window manager.
 	X.ChangeWindowAttributes(display.screen[0].root, { eventMask: events }, function(err) {
+		if( err.error === 10 ) {
+			console.error( "Another window manager is already running" );
+		}
 		console.error(err);
+		process.exit(1);
 	});
 
 	// Load the programs that should get started
