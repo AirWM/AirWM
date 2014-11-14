@@ -4,8 +4,8 @@ var exec = require('child_process').exec;
 // The number of pixels between each window and the border
 var margin = 10;
 
+// Our connection to the X server
 var X;
-var events = x11.eventMask.SubstructureRedirect|x11.eventMask.SubstructureNotify|x11.eventMask.SubstructureRedirect|x11.eventMask.Exposure;
 
 /**
  * Create a new container in the window tree.
@@ -119,7 +119,14 @@ function Container( horizontal, x, y, width, height ) {
 // The container tree with all the windows in it
 var window_tree;
 
-var counter = 0;
+var events           = x11.eventMask.SubstructureRedirect|x11.eventMask.SubstructureNotify | x11.eventMask.KeyPress|x11.eventMask.KeyRelease;
+
+var counter          = 0;
+
+// The keys that are currently pressed
+var pressed_keys     = [];
+// The available key shortcuts that are known
+var key_combinations = require("./keys");
 
 x11.createClient(function(err, display) {
 	X = display.client;
@@ -172,5 +179,31 @@ x11.createClient(function(err, display) {
 	} else if ( ev.type === 23 ) {
 		//var window_width = parseInt(800.0 / windows.length);
 		X.ResizeWindow(ev.wid, ev.width, ev.height);
+	} else if ( ev.name === "KeyPress" ) {
+		// Add the pressed key to the list of pressed keys
+		pressed_keys.push( ev.keycode );
+		console.log( pressed_keys );
+
+		// Foreach known key combination
+		key_combinations.forEach( function(curr,ind,arr) {
+			// Check if all the needed keys are currently pressed
+			if( curr.keys.every(function(curr,ind,arr){
+					return pressed_keys.indexOf(curr) !== -1;
+				}) ) {
+				// Execute the program linked to this shortkey
+				if( curr.program ) {
+					exec( curr.program );
+				}
+				if( curr.command ) {
+					if( curr.command === "Shutdown" ) {
+						console.log( "Shutting down" );
+						process.exit(0);
+					}
+				}
+			}
+		} );
+	} else if ( ev.name === "KeyRelease" ) {
+		// Remove the key from list of pressed keys
+		pressed_keys.splice(pressed_keys.indexOf(ev.keycode),1);
 	}
 });

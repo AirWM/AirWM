@@ -1,0 +1,10 @@
+[
+	{
+		"keys"    : [133,40],
+		"program" : "dmenu_run"
+	},
+	{
+		"keys"    : [133,36],
+		"program" : "xterm"
+	}
+]
