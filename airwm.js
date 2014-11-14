@@ -150,7 +150,7 @@ x11.createClient(function(err, display) {
 	console.error(err);
 }).on('event', function(ev) {
 	//console.log(ev);
-	if( ev.type === 20 ) {
+	if( ev.name === "MapRequest" ) {
 		// To show that the container works change the second
 		// created window into a vertical container and add
 		// future windows to that contaner.
@@ -168,17 +168,15 @@ x11.createClient(function(err, display) {
 			window_tree.windows[1].add_window( ev.wid );
 		}
 
-		console.log( "Current window tree: ", window_tree );
-
 		// Tell X to map this window
 		X.MapWindow( ev.wid );
-	} else if ( ev.type === 17 ) {
+	} else if ( ev.name === "DestroyNotify" ) {
 		window_tree.remove_window( ev.wid );
-		console.log( "Current window tree: ", window_tree );
 		//X.DestroyWindow( ev.wid );
-	} else if ( ev.type === 23 ) {
-		//var window_width = parseInt(800.0 / windows.length);
-		X.ResizeWindow(ev.wid, ev.width, ev.height);
+	} else if ( ev.name === "ConfigureRequest" ) {
+		// Don't allow them window to resize, we decide
+		// how large the window is going to be!
+		//X.ResizeWindow(ev.wid, ev.width, ev.height);
 	} else if ( ev.name === "KeyPress" ) {
 		// Add the pressed key to the list of pressed keys
 		pressed_keys.push( ev.keycode );
