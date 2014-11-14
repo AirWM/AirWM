@@ -1,4 +1,5 @@
-var x11 = require('x11');
+var x11  = require('x11');
+var exec = require('child_process').exec;
 
 // The number of pixels between each window and the border
 var margin = 10;
@@ -126,6 +127,11 @@ x11.createClient(function(err, display) {
 	X.ChangeWindowAttributes(display.screen[0].root, { eventMask: events }, function(err) {
 		console.error(err);
 	});
+
+	// Load the programs that should get started
+	// and start them
+	var programs = require("./startup");
+	programs.forEach(function(curr,ind,arr) { exec(curr) });
 }).on('error', function(err) {
 	console.error(err);
 }).on('event', function(ev) {
