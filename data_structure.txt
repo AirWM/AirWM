@@ -1,0 +1,5 @@
+Container:
+	window: null/windowID
+	parent: Container
+	tiling_mode: horizontal/vertical
+	children: List<(Container,percentage)>
