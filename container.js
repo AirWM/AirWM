@@ -22,6 +22,7 @@ function Container(dimensions,windowID,parent,mode){
 	this.parent = parent;
 	this.tiling_mode = mode;
 	this.children = [];
+	this.margin = 10;// The number of pixels between each window and the border
 	
 	/**
 	 * Adds a child node to the list of children
