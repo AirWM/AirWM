@@ -72,6 +72,17 @@ function Container( horizontal, x, y, width, height ) {
 	 */
 	this.recalculate = function() {
 		if( this.horizontal ) {
+			this.recalculate_horizontal();
+		}
+		else {
+			this.recalculate_vertical();
+		}
+	};
+
+	/**
+	 * Recalculate horizontally tiled windows
+	 */
+	this.recalculate_horizontal = function() {
 			// The width of a window after removing the margins
 			var window_width = parseInt((this.width-(this.windows.length-1)*margin) / this.windows.length);
 			for( var i=0; i<this.windows.length; ++i ) {
@@ -91,8 +102,12 @@ function Container( horizontal, x, y, width, height ) {
 					this.windows[i].recalculate();
 				}
 			}
-		}
-		else {
+	};
+
+	/**
+	 * Recalculate vertically tiled windows
+	 */
+	this.recalculate_vertical = function() {
 			// The height of a window after removing the margins
 			var window_height = parseInt((this.height-(this.windows.length-1)*margin) / this.windows.length);
 			for( var i=0; i<this.windows.length; ++i ) {
@@ -112,7 +127,6 @@ function Container( horizontal, x, y, width, height ) {
 					this.windows[i].recalculate();
 				}
 			}
-		}
 	};
 }
 
