@@ -31,6 +31,7 @@ function Container(dimensions,windowID,parent,mode){
 		var perc = 100/(children.length+1);
 		setChildrenPercentages(perc);
 		children.push({container: container, percentage: perc});
+		//TODO:redraw children?
 	}
 	
 	/**
@@ -50,7 +51,19 @@ function Container(dimensions,windowID,parent,mode){
 	this.setWindow = function (windowID){
 		if(children.length === 0)
 			this.windowID = windowID;
+			//TODO:draw window?
 		else
 			console.error("Cannot set the window attribute of a non-leaf node");
+	}
+	
+	/**
+	 * Switches the tiling mode from vertical to horizontal or vice versa
+	 */
+	this.switchTilingMode = function (){
+		if(this.tiling_mode === "horizontal")
+			this.tiling_mode = "vertical";
+		else
+			this.tiling_mode = "horizontal";
+		//TODO:redraw children
 	}
 }
