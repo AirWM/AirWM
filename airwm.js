@@ -28,7 +28,10 @@ x11.createClient(function(err, display) {
 	global.X.ChangeWindowAttributes(
 		display.screen[0].root,
 		{
-			eventMask: x11.eventMask.SubstructureRedirect|x11.eventMask.SubstructureNotify | x11.eventMask.KeyPress|x11.eventMask.KeyRelease
+			eventMask: 	x11.eventMask.SubstructureRedirect 	| 
+						x11.eventMask.SubstructureNotify	|
+						x11.eventMask.KeyPress				|
+						x11.eventMask.KeyRelease
 		},
 		function(err) {
 			if( err.error === 10 ) {
@@ -69,6 +72,7 @@ x11.createClient(function(err, display) {
 				}) ) {
 				// Execute the program linked to this shortkey
 				if( curr.program ) {
+					console.log("Executing command '",curr.program,"'.");
 					exec( curr.program );
 				}
 				if( curr.command ) {

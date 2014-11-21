@@ -6,5 +6,9 @@
 	{
 		"keys"    : [133,36],
 		"program" : "xterm"
+	},
+	{
+		"keys"    : [133,24],
+		"command" : "Shutdown"
 	}
 ]
