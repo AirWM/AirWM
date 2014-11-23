@@ -184,11 +184,13 @@ function Window(window_id, parent) {
 	this.show = function() {
 		global.X.MapWindow( this.window_id );
 		// Make sure the window is in the correct position again.
+		console.log( "Showing window: ", this.window_id );
 		this.redraw();
 	}
 
 	this.hide = function() {
 		global.X.UnMapWindow( this.window_id );
+		console.log( "Hiding window: ", this.window_id );
 	}
 
 	this.redraw = function() {

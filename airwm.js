@@ -29,10 +29,34 @@ x11.createClient(function(err, display) {
 	global.X.ChangeWindowAttributes(
 		display.screen[0].root,
 		{
-			eventMask: x11.eventMask.SubstructureRedirect |
-			           x11.eventMask.SubstructureNotify   |
-			           x11.eventMask.KeyPress             |
-			           x11.eventMask.KeyRelease
+      // node-x11/lib/eventmask.js
+      // https://github.com/sidorares/node-x11/blob/master/lib/eventmask.js
+      // Comment non-required events
+			eventMask:  x11.eventMask.KeyPress              |
+                  x11.eventMask.KeyRelease            |
+                  x11.eventMask.ButtonPress           |
+                  x11.eventMask.ButtonRelease         |
+                  x11.eventMask.EnterWindow           |
+                  x11.eventMask.LeaveWindow           |  // Event Type: 8
+                  x11.eventMask.PointerMotion         |
+                  x11.eventMask.PointerMotionHint     |
+                  x11.eventMask.Button1Motion         |
+                  x11.eventMask.Button2Motion         |
+                  x11.eventMask.Button3Motion         |
+                  x11.eventMask.Button4Motion         |
+                  x11.eventMask.Button5Motion         |
+                  x11.eventMask.ButtonMotion          |
+                  x11.eventMask.KeymapState           | // Event Type: 11
+                  x11.eventMask.Exposure              |
+                  x11.eventMask.VisibilityChange      |
+                  x11.eventMask.StructureNotify       |
+                  x11.eventMask.ResizeRedirect        |
+                  x11.eventMask.SubstructureNotify    |
+                  x11.eventMask.SubstructureRedirect  |
+                  x11.eventMask.FocusChange           |
+                  x11.eventMask.PropertyChange        |
+                  x11.eventMask.ColormapChange        |
+                  x11.eventMask.OwnerGrabButton           
 		},
 		function(err) {
 			if( err.error === 10 ) {
@@ -43,6 +67,17 @@ x11.createClient(function(err, display) {
 		}
 	);
 
+  /*
+   * TODO: Autoread and grab each key from keys.json file.
+   */
+  // GrabKeyboard(wid, ownerEvents, time, pointerMode, keybMode);
+  // global.X.GrabKeyboard( display.screen[0].root, 0, 0, 0, 1);
+  // GrabKey(wid, ownerEvents, modifiers, key, pointerMode, keybMode)
+  global.X.GrabKey(display.screen[0].root, 0, 64, 36, 0, 1); // 64: Super Modifier
+  global.X.GrabKey(display.screen[0].root, 0, 64, 24, 0, 1);
+  global.X.GrabKey(display.screen[0].root, 0, 64, 40, 0, 1);
+
+
 	// Load the programs that should get started
 	// and start them
 	var programs = require("./startup");
@@ -50,7 +85,7 @@ x11.createClient(function(err, display) {
 }).on('error', function(err) {
 	console.error(err);
 }).on('event', function(ev) {
-	//console.log(ev);
+	console.log(ev);
 	if( ev.name === "MapRequest" ) {
 		workspaces.getCurrentWorkspace().addWindow( ev.wid );
 	} else if ( ev.name === "DestroyNotify" ) {

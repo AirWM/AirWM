@@ -1,14 +1,14 @@
 [
 	{
-		"keys"    : [133,40],
+		"keys"    : [40],
 		"program" : "dmenu_run"
 	},
 	{
-		"keys"    : [133,36],
+		"keys"    : [36],
 		"program" : "xterm"
 	},
 	{
-		"keys"    : [133,24],
+		"keys"    : [24],
 		"command" : "Shutdown"
 	}
 ]
