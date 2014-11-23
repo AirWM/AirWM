@@ -1,14 +1,17 @@
 [
 	{
-		"keys"    : [40],
+		"key"      : 40,
+    "modifier" : "super",
 		"program" : "dmenu_run"
 	},
 	{
-		"keys"    : [36],
+		"key"    : 36,
+    "modifier" : "super",
 		"program" : "xterm"
 	},
 	{
-		"keys"    : [24],
+		"key"    : 24,
+    "modifier" : "super",
 		"command" : "Shutdown"
 	}
 ]

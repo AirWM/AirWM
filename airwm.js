@@ -11,8 +11,6 @@ var Workspaces = require('./objects').Workspaces,
 // The workspaces currently available
 var workspaces;
 
-// The keys that are currently pressed
-var pressed_keys     = [];
 // The available key shortcuts that are known
 var key_combinations = require("./keys");
 
@@ -84,7 +82,7 @@ x11.createClient(function(err, display) {
 }).on('error', function(err) {
 	console.error(err);
 }).on('event', function(ev) {
-	console.log(ev);
+	//console.log(ev);
 	if( ev.name === "MapRequest" ) {
 		workspaces.getCurrentWorkspace().addWindow( ev.wid );
 	} else if ( ev.name === "DestroyNotify" ) {
@@ -101,31 +99,33 @@ x11.createClient(function(err, display) {
 		// how large the window is going to be!
 		//X.ResizeWindow(ev.wid, ev.width, ev.height);
 	} else if ( ev.name === "KeyPress" ) {
-		// Add the pressed key to the list of pressed keys
-		pressed_keys.push( ev.keycode );
-		console.log( pressed_keys );
-
-		// Foreach known key combination
-		key_combinations.forEach( function(curr,ind,arr) {
-			// Check if all the needed keys are currently pressed
-			if( curr.keys.every(function(curr,ind,arr){
-					return pressed_keys.indexOf(curr) !== -1;
-				}) ) {
-				// Execute the program linked to this shortkey
-				if( curr.program ) {
-					console.log("Executing command '",curr.program,"'.");
-					exec( curr.program );
-				}
-				if( curr.command ) {
-					if( curr.command === "Shutdown" ) {
-						console.log( "Shutting down" );
-						process.exit(0);
-					}
-				}
-			}
-		} );
+    // Go through all configured key combinations.
+    for(var binding_index in key_combinations){
+      var binding =  key_combinations[binding_index];
+      // Check if this is the binding which we are seeking.
+      if(binding.key === ev.keycode){
+        if(translateModifiers(binding.modifier) === ev.buttons){
+          if(binding.hasOwnProperty('command')){
+            console.log("Launching airwm-command: '", binding.command, "'.");
+            if(binding.command === "Shutdown"){
+              process.exit(0);
+            }
+          } else if(binding.hasOwnProperty("program")){
+            console.log("Launching external application: '", binding.program, "'.");
+            exec( binding.program );
+          }
+        }
+      }
+    }
 	} else if ( ev.name === "KeyRelease" ) {
-		// Remove the key from list of pressed keys
-		pressed_keys.splice(pressed_keys.indexOf(ev.keycode),1);
 	}
 });
+translateModifiers = function(sModifier){
+  switch(sModifier){
+    case "super":
+      return 64;
+    default:
+      return 0;
+  }
+}
+
