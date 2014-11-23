@@ -54,7 +54,13 @@ x11.createClient(function(err, display) {
 	if( ev.name === "MapRequest" ) {
 		workspaces.getCurrentWorkspace().addWindow( ev.wid );
 	} else if ( ev.name === "DestroyNotify" ) {
-		//window_tree.remove_window( ev.wid );
+		// Just search through all windows and remove the window
+		// that got destroyed out of the tree.
+		workspaces.forEachWindow(function(window) {
+			if( window.window_id === ev.wid ) {
+				window.remove();
+			}
+		});
 		//X.DestroyWindow( ev.wid );
 	} else if ( ev.name === "ConfigureRequest" ) {
 		// Don't allow them window to resize, we decide

@@ -42,6 +42,12 @@ function Workspaces( screens ) {
 	this.getCurrentWorkspace = function() {
 		return workspaces[current_workspace];
 	}
+
+	this.forEachWindow = function(callback) {
+		for( var i=0; i<workspaces.length; ++i ) {
+			workspaces[i].forEachWindow(callback);
+		}
+	}
 }
 
 /**
@@ -148,6 +154,18 @@ function Container(dimensions, parent, margin) {
 		}
 	}
 
+	this.remove = function() {
+		if( this.parent !== null ) {
+			this.parent.children.splice(this.parent.children.indexOf(this),1);
+			if( this.parent.children.length === 0 ) {
+				this.parent.remove();
+			}
+			else {
+				this.parent.redraw();
+			}
+		}
+	}
+
 	this.forEachWindow = function(callback) {
 		for( var i=0; i<this.children.length; ++i ) {
 			this.children[i].forEachWindow(callback);
@@ -174,7 +192,23 @@ function Window(window_id, parent) {
 	}
 
 	this.redraw = function() {
-		global.X.MoveResizeWindow( this.window_id, this.dimensions.x, this.dimensions.y, this.dimensions.width, this.dimensions.height);
+		global.X.MoveResizeWindow(
+			this.window_id,
+			this.dimensions.x,
+			this.dimensions.y,
+			this.dimensions.width,
+			this.dimensions.height
+		);
+	}
+
+	this.remove = function() {
+		this.parent.children.splice(this.parent.children.indexOf(this),1);
+		if( this.parent.children.length === 0 ) {
+			this.parent.remove();
+		}
+		else {
+			this.parent.redraw();
+		}
 	}
 
 	this.forEachWindow = function(callback) {
