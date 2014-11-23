@@ -91,15 +91,14 @@ function Screen(screen) {
 	this.mm_width       = screen.mm_width;
 	this.mm_height      = screen.mm_height;
 
-	this.window_tree = null;
+	// The number of pixels between each screen, should be
+	// about 10mm
+	var margin = parseInt(this.width/this.mm_width * 5);
+
+	this.window_tree = new Container(new Rectangle(margin,margin,this.width-2*margin,this.height-2*margin), null, margin);
 
 	this.addWindow = function( window_id ) {
-		if( this.window_tree === null ) {
-			this.window_tree = new Window(new Rectangle(0,0,this.width,this.height), window_id, null);
-		}
-		else {
-			this.window_tree.addWindow(window_id);
-		}
+		this.window_tree.addWindow(window_id);
 	}
 
 	this.forEachWindow = function(callback) {
@@ -112,16 +111,41 @@ function Screen(screen) {
 /**
  * A container
  */
-function Container(dimensions, parent) {
+function Container(dimensions, parent, margin) {
 	this.dimensions  = dimensions;
 	this.tiling_mode = "horizontal";
 	this.parent      = parent;
 	this.children    = [];
+	this.margin      = margin;
 
 	this.addWindow = function(window_id) {
+		var new_window = new Window(window_id, this);
+		this.children.push( new_window );
+		this.redraw();
+		new_window.show();
 	}
 
-	this.recalculate = function() {
+	this.redraw = function() {
+		if( this.tiling_mode === "horizontal" ) {
+			var child_width = parseInt( (this.dimensions.width-(this.children.length-1)*this.margin) / this.children.length);
+			for( var i=0; i<this.children.length; ++i ) {
+				this.children[i].dimensions.x      = this.dimensions.x + (child_width+this.margin)*i;
+				this.children[i].dimensions.y      = this.dimensions.y;
+				this.children[i].dimensions.width  = child_width;
+				this.children[i].dimensions.height = this.dimensions.height;
+				this.children[i].redraw();
+			}
+		}
+		else {
+			var child_height = parseInt( (this.dimensions.height-(this.children.length-1)*this.margin) / this.children.length);
+			for( var i=0; i<this.children.length; ++i ) {
+				this.children[i].dimensions.x      = this.dimensions.x;
+				this.children[i].dimensions.y      = this.dimensions.y + (child_height+this.margin)*i;
+				this.children[i].dimensions.width  = this.dimensions.width;
+				this.children[i].dimensions.height = child_height;
+				this.children[i].redraw();
+			}
+		}
 	}
 
 	this.forEachWindow = function(callback) {
@@ -134,29 +158,28 @@ function Container(dimensions, parent) {
 /**
  * A window
  */
-function Window(dimensions, window_id, parent) {
-	this.dimensions = dimensions;
+function Window(window_id, parent) {
+	this.dimensions = new Rectangle(0,0,1,1);
 	this.parent     = parent;
 	this.window_id  = window_id;
 
-	this.addWindow = function(window_id) {
-	}
-
 	this.show = function() {
-		global.X.MoveResizeWindow( this.window_id, this.dimensions.x, this.dimensions.y, this.dimensions.width, this.dimensions.height);
 		global.X.MapWindow( this.window_id );
+		// Make sure the window is in the correct position again.
+		this.redraw();
 	}
 
 	this.hide = function() {
 		global.X.UnMapWindow( this.window_id );
 	}
 
+	this.redraw = function() {
+		global.X.MoveResizeWindow( this.window_id, this.dimensions.x, this.dimensions.y, this.dimensions.width, this.dimensions.height);
+	}
+
 	this.forEachWindow = function(callback) {
 		callback( this );
 	}
-
-	// Show this window after creating it
-	this.show();
 }
 
 // Declare that we want to export the classes defined

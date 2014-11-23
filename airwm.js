@@ -9,7 +9,7 @@ var Workspaces = require('./objects').Workspaces,
     Container  = require('./objects').Container;
 
 // The workspaces currently available
-var workspaces
+var workspaces;
 
 // The keys that are currently pressed
 var pressed_keys     = [];
@@ -17,21 +17,22 @@ var pressed_keys     = [];
 var key_combinations = require("./keys");
 
 x11.createClient(function(err, display) {
-	// Create the workspaces object
-	workspaces = new Workspaces( display.screen );
-
 	// Set the connection to the X server in global namespace
 	// as a hack since almost every file uses it
 	global.X = display.client;
 
+	// Create the workspaces object
+	workspaces = new Workspaces( display.screen );
+
 	// By adding the substructure redirect you become the window manager.
+	// TODO Should we register for all screens?
 	global.X.ChangeWindowAttributes(
 		display.screen[0].root,
 		{
-			eventMask: 	x11.eventMask.SubstructureRedirect 	| 
-						x11.eventMask.SubstructureNotify	|
-						x11.eventMask.KeyPress				|
-						x11.eventMask.KeyRelease
+			eventMask: x11.eventMask.SubstructureRedirect |
+			           x11.eventMask.SubstructureNotify   |
+			           x11.eventMask.KeyPress             |
+			           x11.eventMask.KeyRelease
 		},
 		function(err) {
 			if( err.error === 10 ) {
