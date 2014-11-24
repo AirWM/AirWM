@@ -103,7 +103,7 @@ x11.createClient(function(err, display) {
 			var binding =  key_combinations[binding_index];
 			// Check if this is the binding which we are seeking.
 			if(binding.key === ev.keycode){
-				if(translateModifiers(binding.modifier) === ev.buttons){
+				if(translateModifiers(binding.modifier) === (ev.buttons&translateModifiers(binding.modifier))){
 					if(binding.hasOwnProperty('command')){
 						console.log("Launching airwm-command: '", binding.command, "'.");
 						if(binding.command === "Shutdown"){
