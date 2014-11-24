@@ -10,6 +10,11 @@
 		"program"  : "xterm"
 	},
 	{
+		"key"      : 54,
+		"modifier" : "super",
+		"command"  : "CloseWindow"
+	},
+	{
 		"key"      : 24,
 		"modifier" : "super",
 		"command"  : "Shutdown"
