@@ -74,6 +74,7 @@ x11.createClient(function(err, display) {
 	global.X.GrabKey(display.screen[0].root, 0, 64, 36, 0, 1); // 64: Super Modifier
 	global.X.GrabKey(display.screen[0].root, 0, 64, 24, 0, 1);
 	global.X.GrabKey(display.screen[0].root, 0, 64, 40, 0, 1);
+	global.X.GrabKey(display.screen[0].root, 0, 64, 54, 0, 1);
 
 	// Load the programs that should get started
 	// and start them
@@ -106,8 +107,20 @@ x11.createClient(function(err, display) {
 				if(translateModifiers(binding.modifier) === (ev.buttons&translateModifiers(binding.modifier))){
 					if(binding.hasOwnProperty('command')){
 						console.log("Launching airwm-command: '", binding.command, "'.");
-						if(binding.command === "Shutdown"){
-							process.exit(0);
+						switch(binding.command){
+							case "Shutdown":
+								process.exit(0);
+								break;
+							case "CloseWindow":
+								console.log("Closing window...", ev.child);
+								workspaces.getCurrentWorkspace().removeWindow( ev.child );
+								break;
+							case "SwitchTilingMode":
+								console.log("Switching tiling mode");
+								workspaces.getCurrentWorkspace().switchTilingMode();
+								break;
+							default:
+								break;
 						}
 						else if (binding.command === "SwitchTilingMode"){
 							console.log("Switching tiling mode");
