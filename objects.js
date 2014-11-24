@@ -67,6 +67,10 @@ function Workspace( screens ) {
 	this.addWindow = function(window_id) {
 		this.screens[0].addWindow(window_id);
 	}
+	
+	this.switchTilingMode = function(){
+		this.screens[0].switchTilingMode();
+	}
 
 	this.show = function() {
 		this.forEachWindow(function(window) {
@@ -105,6 +109,10 @@ function Screen(screen) {
 
 	this.addWindow = function( window_id ) {
 		this.window_tree.addWindow(window_id);
+	}
+	
+	this.switchTilingMode = function(){
+		this.window_tree.switchTilingMode();
 	}
 
 	this.forEachWindow = function(callback) {

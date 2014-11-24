@@ -109,6 +109,10 @@ x11.createClient(function(err, display) {
 						if(binding.command === "Shutdown"){
 							process.exit(0);
 						}
+						else if (binding.command === "SwitchTilingMode"){
+							console.log("Switching tiling mode");
+							workspaces.getCurrentWorkspace().switchTilingMode();
+						}
 					} else if(binding.hasOwnProperty("program")){
 						console.log("Launching external application: '", binding.program, "'.");
 						exec( binding.program );
