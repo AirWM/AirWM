@@ -65,16 +65,11 @@ x11.createClient(function(err, display) {
 		}
 	);
 
-	/*
-	 * TODO: Autoread and grab each key from keys.json file.
-	 */
-	// GrabKeyboard(wid, ownerEvents, time, pointerMode, keybMode);
-	// global.X.GrabKeyboard( display.screen[0].root, 0, 0, 0, 1);
-	// GrabKey(wid, ownerEvents, modifiers, key, pointerMode, keybMode)
-	global.X.GrabKey(display.screen[0].root, 0, 64, 36, 0, 1); // 64: Super Modifier
-	global.X.GrabKey(display.screen[0].root, 0, 64, 24, 0, 1);
-	global.X.GrabKey(display.screen[0].root, 0, 64, 40, 0, 1);
-	global.X.GrabKey(display.screen[0].root, 0, 64, 54, 0, 1);
+	// Grab all key combinations which are specified in the configuration file.
+	key_combinations.forEach(function(keyConfiguration){
+		global.X.GrabKey(display.screen[0].root, 0, translateModifiers(keyConfiguration.modifier),
+				keyConfiguration.key, 0, 1);
+	});
 
 	// Load the programs that should get started
 	// and start them
