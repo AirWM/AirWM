@@ -13,5 +13,10 @@
 		"key"      : 24,
 		"modifier" : "super",
 		"command"  : "Shutdown"
+	},
+	{
+		"key"      : 28,
+		"modifier" : "super",
+		"command"  : "SwitchTilingMode"
 	}
 ]
