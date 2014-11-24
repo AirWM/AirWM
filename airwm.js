@@ -99,33 +99,34 @@ x11.createClient(function(err, display) {
 		// how large the window is going to be!
 		//X.ResizeWindow(ev.wid, ev.width, ev.height);
 	} else if ( ev.name === "KeyPress" ) {
-    // Go through all configured key combinations.
-    for(var binding_index in key_combinations){
-      var binding =  key_combinations[binding_index];
-      // Check if this is the binding which we are seeking.
-      if(binding.key === ev.keycode){
-        if(translateModifiers(binding.modifier) === ev.buttons){
-          if(binding.hasOwnProperty('command')){
-            console.log("Launching airwm-command: '", binding.command, "'.");
-            if(binding.command === "Shutdown"){
-              process.exit(0);
-            }
-          } else if(binding.hasOwnProperty("program")){
-            console.log("Launching external application: '", binding.program, "'.");
-            exec( binding.program );
-          }
-        }
-      }
-    }
+		// Go through all configured key combinations.
+		for(var binding_index in key_combinations){
+			var binding =  key_combinations[binding_index];
+			// Check if this is the binding which we are seeking.
+			if(binding.key === ev.keycode){
+				if(translateModifiers(binding.modifier) === ev.buttons){
+					if(binding.hasOwnProperty('command')){
+						console.log("Launching airwm-command: '", binding.command, "'.");
+						if(binding.command === "Shutdown"){
+							process.exit(0);
+						}
+					} else if(binding.hasOwnProperty("program")){
+						console.log("Launching external application: '", binding.program, "'.");
+						exec( binding.program );
+					}
+				}
+			}
+		}
 	} else if ( ev.name === "KeyRelease" ) {
 	}
 });
+
 translateModifiers = function(sModifier){
-  switch(sModifier){
-    case "super":
-      return 64;
-    default:
-      return 0;
-  }
+	switch(sModifier){
+		case "super":
+			return 64;
+		default:
+			return 0;
+	}
 }
 
