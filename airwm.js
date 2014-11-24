@@ -93,7 +93,6 @@ x11.createClient(function(err, display) {
 				window.remove();
 			}
 		});
-		//X.DestroyWindow( ev.wid );
 	} else if ( ev.name === "ConfigureRequest" ) {
 		// Don't allow them window to resize, we decide
 		// how large the window is going to be!

@@ -121,9 +121,13 @@ function Container(dimensions, parent, margin) {
 	this.dimensions  = dimensions;
 	this.tiling_mode = "horizontal";
 	this.parent      = parent;
-	this.children    = [];
 	this.margin      = margin;
+	this.children    = [];
 
+	/**
+	 * Add a window to this container.
+	 * \param window_id The window id of the window
+	 */
 	this.addWindow = function(window_id) {
 		var new_window = new Window(window_id, this);
 		this.children.push( new_window );
@@ -131,6 +135,11 @@ function Container(dimensions, parent, margin) {
 		new_window.show();
 	}
 
+	/**
+	 * Recalculate the dimensions of the children in this container
+	 * and tell them to also redraw. If a child is a window it re-
+	 * positions in X.
+	 */
 	this.redraw = function() {
 		if( this.tiling_mode === "horizontal" ) {
 			var child_width = parseInt( (this.dimensions.width-(this.children.length-1)*this.margin) / this.children.length);
@@ -154,8 +163,11 @@ function Container(dimensions, parent, margin) {
 		}
 	}
 
+	/**
+	 * Remove this container if possible
+	 */
 	this.remove = function() {
-		if( this.parent !== null ) {
+		if( this.parent !== null && this.children.length === 0 ) {
 			this.parent.children.splice(this.parent.children.indexOf(this),1);
 			if( this.parent.children.length === 0 ) {
 				this.parent.remove();
@@ -166,10 +178,25 @@ function Container(dimensions, parent, margin) {
 		}
 	}
 
+	/**
+	 * Execute a function on all windows in this container.
+	 */
 	this.forEachWindow = function(callback) {
 		for( var i=0; i<this.children.length; ++i ) {
 			this.children[i].forEachWindow(callback);
 		}
+	}
+
+	/**
+	 * Switches the tiling mode from vertical to horizontal or vice versa
+	 */
+	this.switchTilingMode = function (){
+		if(this.tiling_mode === "horizontal")
+			this.tiling_mode = "vertical";
+		else
+			this.tiling_mode = "horizontal";
+
+		this.redraw();
 	}
 }
 
@@ -181,18 +208,25 @@ function Window(window_id, parent) {
 	this.parent     = parent;
 	this.window_id  = window_id;
 
+	/**
+	 * Show this window, tell X to draw it.
+	 */
 	this.show = function() {
 		global.X.MapWindow( this.window_id );
 		// Make sure the window is in the correct position again.
-		console.log( "Showing window: ", this.window_id );
 		this.redraw();
 	}
 
+	/**
+	 * Hide this window, tell X not to draw it.
+	 */
 	this.hide = function() {
 		global.X.UnMapWindow( this.window_id );
-		console.log( "Hiding window: ", this.window_id );
 	}
 
+	/**
+	 * Tell X where to position this window.
+	 */
 	this.redraw = function() {
 		global.X.MoveResizeWindow(
 			this.window_id,
@@ -203,6 +237,18 @@ function Window(window_id, parent) {
 		);
 	}
 
+	/**
+	 * Destroy this window.
+	 */
+	this.destroy = function() {
+		global.X.DestroyWindow( this.window_id );
+		this.remove();
+	}
+
+	/**
+	 * Remove this window from the parent container, does not
+	 * kill the window process.
+	 */
 	this.remove = function() {
 		this.parent.children.splice(this.parent.children.indexOf(this),1);
 		if( this.parent.children.length === 0 ) {
@@ -213,6 +259,9 @@ function Window(window_id, parent) {
 		}
 	}
 
+	/**
+	 * Execute a function on this window.
+	 */
 	this.forEachWindow = function(callback) {
 		callback( this );
 	}
