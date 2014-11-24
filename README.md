@@ -4,6 +4,7 @@ AirWM is a Window Manager for X implemented in JavaScript (node.js) using the X1
 
 Contributors
 ------------
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/AirWM/AirWM?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * Martin Rogalla [GitHub](https://github.com/MartinRogalla) / [Twitter](https://twitter.com/MartinRogalla)
 * Harmjan Treep [GitHub](https://github.com/harmjan)
 * Niels Spruit [GitHub](https://github.com/nspruit) / [Twitter](https://twitter.com/n_spruit)
