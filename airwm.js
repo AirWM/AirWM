@@ -122,10 +122,6 @@ x11.createClient(function(err, display) {
 							default:
 								break;
 						}
-						else if (binding.command === "SwitchTilingMode"){
-							console.log("Switching tiling mode");
-							workspaces.getCurrentWorkspace().switchTilingMode();
-						}
 					} else if(binding.hasOwnProperty("program")){
 						console.log("Launching external application: '", binding.program, "'.");
 						exec( binding.program );
