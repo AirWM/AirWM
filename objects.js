@@ -156,11 +156,11 @@ function Container(dimensions, parent, margin) {
 	 * \param window_id The window id of the window
 	 */
 	this.removeWindow = function(window_id) {
-		for(child in this.children){
-			if(this.children[child].window_id === window_id){
-				this.children[child].destroy();
+		this.forEachWindow(function(window){
+			if(window.window_id === window_id){
+				window.destroy();
 			}
-		}
+		});
 		this.redraw();
 	}
 
