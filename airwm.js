@@ -95,8 +95,8 @@ x11.createClient(function(err, display) {
 		//X.ResizeWindow(ev.wid, ev.width, ev.height);
 	} else if ( ev.name === "KeyPress" ) {
 		// Go through all configured key combinations.
-		for(var binding_index in key_combinations){
-			var binding =  key_combinations[binding_index];
+		for(var i = 0; i < key_combinations.length; ++i){
+			var binding =  key_combinations[i];
 			// Check if this is the binding which we are seeking.
 			if(binding.key === ev.keycode){
 				if(translateModifiers(binding.modifier) === (ev.buttons&translateModifiers(binding.modifier))){
