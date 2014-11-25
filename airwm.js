@@ -35,7 +35,7 @@ x11.createClient(function(err, display) {
 			            x11.eventMask.ButtonPress          |
 			            x11.eventMask.ButtonRelease        |
 			            x11.eventMask.EnterWindow          |
-			            x11.eventMask.LeaveWindow          |  // Event Type: 8
+			            x11.eventMask.LeaveWindow          | // Event Type: 8
 			            x11.eventMask.PointerMotion        |
 			            x11.eventMask.PointerMotionHint    |
 			            x11.eventMask.Button1Motion        |

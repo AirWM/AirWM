@@ -105,6 +105,10 @@ function Screen(screen) {
 	this.mm_width       = screen.mm_width;
 	this.mm_height      = screen.mm_height;
 
+	// Pixels per mm
+	var ppmm_width = (this.pixel_width) / (this.mm_width);
+	var ppmm_height = (this.pixel_height) / (this.mm_height);
+
 	// The number of pixels between each screen, should be
 	// about 10mm
 	var margin = parseInt(this.width/this.mm_width * 5);
