@@ -72,10 +72,6 @@ function Workspace( screens ) {
 		this.screens[0].switchTilingMode();
 	}
 
-	this.removeWindow = function(window_id) {
-		this.screens[0].removeWindow(window_id);
-	}
-
 	this.show = function() {
 		this.forEachWindow(function(window) {
 			window.show();
@@ -119,10 +115,6 @@ function Screen(screen) {
 		this.window_tree.switchTilingMode();
 	}
 
-	this.removeWindow = function( window_id ) {
-		this.window_tree.removeWindow(window_id);
-	}
-
 	this.forEachWindow = function(callback) {
 		if( this.window_tree !== null ) {
 			this.window_tree.forEachWindow(callback);
@@ -149,19 +141,6 @@ function Container(dimensions, parent, margin) {
 		this.children.push( new_window );
 		this.redraw();
 		new_window.show();
-	}
-
-	/**
-	 * Remove a window from this container.
-	 * \param window_id The window id of the window
-	 */
-	this.removeWindow = function(window_id) {
-		this.forEachWindow(function(window){
-			if(window.window_id === window_id){
-				window.destroy();
-			}
-		});
-		this.redraw();
 	}
 
 	/**

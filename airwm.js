@@ -108,7 +108,11 @@ x11.createClient(function(err, display) {
 								break;
 							case "CloseWindow":
 								console.log("Closing window...", ev.child);
-								workspaces.getCurrentWorkspace().removeWindow( ev.child );
+								workspaces.forEachWindow(function(window){
+									if(window.window_id === ev.child){
+										window.destroy();
+									}
+								});
 								break;
 							case "SwitchTilingMode":
 								console.log("Switching tiling mode");
