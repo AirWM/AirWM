@@ -12,7 +12,9 @@ var Workspaces = require('./objects').Workspaces,
 var workspaces;
 
 // The available key shortcuts that are known
-var key_combinations = require("./keys");
+var config = require("./config");
+var programs = config.startup_applications
+var keybindings = config.keybindings
 
 x11.createClient(function(err, display) {
 	// Set the connection to the X server in global namespace
@@ -66,14 +68,13 @@ x11.createClient(function(err, display) {
 	);
 
 	// Grab all key combinations which are specified in the configuration file.
-	key_combinations.forEach(function(keyConfiguration){
+	keybindings.forEach(function(keyConfiguration){
 		global.X.GrabKey(display.screen[0].root, 0, translateModifiers(keyConfiguration.modifier),
 				keyConfiguration.key, 0, 1);
 	});
 
 	// Load the programs that should get started
 	// and start them
-	var programs = require("./startup");
 	programs.forEach(function(curr,ind,arr) { exec(curr) });
 }).on('error', function(err) {
 	console.error(err);
@@ -95,8 +96,8 @@ x11.createClient(function(err, display) {
 		//X.ResizeWindow(ev.wid, ev.width, ev.height);
 	} else if ( ev.name === "KeyPress" ) {
 		// Go through all configured key combinations.
-		for(var i = 0; i < key_combinations.length; ++i){
-			var binding =  key_combinations[i];
+		for(var i = 0; i < keybindings.length; ++i){
+			var binding =  keybindings[i];
 			// Check if this is the binding which we are seeking.
 			if(binding.key === ev.keycode){
 				if(translateModifiers(binding.modifier) === (ev.buttons&translateModifiers(binding.modifier))){
