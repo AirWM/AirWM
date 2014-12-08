@@ -30,6 +30,11 @@
 			"key"      : 28,
 			"modifier" : "super",
 			"command"  : "SwitchTilingMode"
+		},
+		{
+			"key"      : 25,
+			"modifier" : "super",
+			"command"  : "SwitchWorkspace"
 		}
 	]
 }
