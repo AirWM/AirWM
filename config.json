@@ -32,9 +32,14 @@
 			"command"  : "SwitchTilingMode"
 		},
 		{
-			"key"      : 25,
+			"key"      : 56,
 			"modifier" : "super",
-			"command"  : "SwitchWorkspace"
+			"command"  : "SwitchWorkspaceLeft"
+		},
+		{
+			"key"      : 41,
+			"modifier" : "super",
+			"command"  : "SwitchWorkspaceRight"
 		}
 	]
 }

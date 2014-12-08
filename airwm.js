@@ -119,6 +119,10 @@ x11.createClient(function(err, display) {
 								console.log("Switching tiling mode");
 								workspaces.getCurrentWorkspace().switchTilingMode();
 								break;
+							case "SwitchWorkspace":
+								console.log("Switching workspace");
+								workspaces.moveRight();
+								break;
 							default:
 								break;
 						}
