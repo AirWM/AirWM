@@ -229,7 +229,7 @@ function Window(window_id, parent) {
 	 * Hide this window, tell X not to draw it.
 	 */
 	this.hide = function() {
-		global.X.UnMapWindow( this.window_id );
+		global.X.UnmapWindow( this.window_id );
 	}
 
 	/**
