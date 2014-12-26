@@ -217,6 +217,66 @@ function Window(window_id, parent) {
 	this.window_id  = window_id;
 
 	/**
+	 * Move a window in a direction.
+	 *
+	 * \param window The window to move.
+	 * \param tiling_mode The tiling mode to move the window in.
+	 * \param direction The direction to move the window in the array.
+	 */
+	function move(window,tiling_mode,direction) {
+		// Find the container to add the window to
+		var previous_container = window;
+		var container          = window.parent;
+		while( container.parent !== null && container.children.length !== 1 && container.tiling_mode != tiling_mode ) {
+			previous_container = container;
+			container          = container.parent;
+		}
+		if( container.tiling_mode !== tiling_mode ) {
+			// If there is no container with the correct tiling_mode
+			// in the path to the root of the tree try to change the
+			// tiling_mode, if not possible without affecting other
+			// windows create a new root container.
+			if( container.children.length === 1 ) {
+				container.tiling_mode = tiling_mode;
+			}
+			else {
+				console.log("No new rooting yet.");
+				return;
+			}
+		}
+
+		// Get the index of the previous container
+		var index = container.children.indexOf(previous_container);
+		// If this window cannot any further without going out of bounds
+		//if( index === -1 ) return;
+		// Remove the window from it's original position
+		window.remove();
+		// If the previous container doesn't exist anymore
+		if( container.children.indexOf(previous_container) === -1 ) {
+			if( direction === 0 ) direction = -1;
+		}
+		index += direction;
+
+		if( index < 0 ) index = 0;
+		if( index >= container.children.length ) index = container.children.length;
+
+		// Add the window to the new position
+		container.children.splice(index,0,window);
+		window.parent = container;
+
+		// Recalculate the container
+		container.redraw();
+	}
+
+	/**
+	 * Move the window in a direction.
+	 */
+	this.moveLeft  = function() { move(this,"horizontal",0); }
+	this.moveRight = function() { move(this,"horizontal",1); }
+	this.moveUp    = function() { move(this,"vertical",  0); }
+	this.moveDown  = function() { move(this,"vertical",  1); }
+
+	/**
 	 * Show this window, tell X to draw it.
 	 */
 	this.show = function() {
