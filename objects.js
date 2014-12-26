@@ -227,7 +227,20 @@ function Window(window_id, parent) {
 		// Find the container to add the window to
 		var previous_container = window;
 		var container          = window.parent;
-		while( container.parent !== null && container.children.length !== 1 && container.tiling_mode != tiling_mode ) {
+		// Walk up the tree untill we find the root container or the container
+		// in which we need to move the window.
+		while(
+		       // Continue while there is a parent container
+		       container.parent !== null &&
+		       // Continue if the current container only contains 1 child
+		       container.children.length !== 1 &&
+		       // Continue if the tiling mode isn't correct
+		       container.tiling_mode !== tiling_mode &&
+		       // Continue if we're moving left and the current window is leftmost in this container
+		       !(direction===0 && container.children.indexOf(previous_container)===0) &&
+		       // Continue if we're moving right and the current window is rightmost in this container
+		       !(direction===1 && container.children.indexOf(previous_container)===container.children.length-1)
+		     ) {
 			previous_container = container;
 			container          = container.parent;
 		}
@@ -247,8 +260,6 @@ function Window(window_id, parent) {
 
 		// Get the index of the previous container
 		var index = container.children.indexOf(previous_container);
-		// If this window cannot any further without going out of bounds
-		//if( index === -1 ) return;
 		// Remove the window from it's original position
 		window.remove();
 		// If the previous container doesn't exist anymore
@@ -257,6 +268,7 @@ function Window(window_id, parent) {
 		}
 		index += direction;
 
+		// Correct if the window would move out of the container
 		if( index < 0 ) index = 0;
 		if( index >= container.children.length ) index = container.children.length;
 
