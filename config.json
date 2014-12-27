@@ -7,47 +7,47 @@
 	],
 	"keybindings" : [
 		{
-			"key"      : 40,
+			"key"      : "d",
 			"modifier" : "super",
 			"program"  : "dmenu_run"
 		},
 		{
-			"key"      : 36,
+			"key"      : "Return",
 			"modifier" : "super",
 			"program"  : "xterm"
 		},
 		{
-			"key"      : 54,
+			"key"      : "w",
 			"modifier" : "super",
 			"command"  : "CloseWindow"
 		},
 		{
-			"key"      : 24,
+			"key"      : "q",
 			"modifier" : "super",
 			"command"  : "Shutdown"
 		},
 		{
-			"key"      : 28,
+			"key"      : "t",
 			"modifier" : "super",
 			"command"  : "SwitchTilingMode"
 		},
 		{
-			"key"      : 43,
+			"key"      : "h",
 			"modifier" : "super",
 			"command"  : "MoveWindowLeft"
 		},
 		{
-			"key"      : 44,
+			"key"      : "j",
 			"modifier" : "super",
 			"command"  : "MoveWindowDown"
 		},
 		{
-			"key"      : 45,
+			"key"      : "k",
 			"modifier" : "super",
 			"command"  : "MoveWindowUp"
 		},
 		{
-			"key"      : 46,
+			"key"      : "l",
 			"modifier" : "super",
 			"command"  : "MoveWindowRight"
 		}
