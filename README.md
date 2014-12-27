@@ -5,9 +5,9 @@ AirWM is a Window Manager for X implemented in JavaScript (node.js) using the X1
 Contributors
 ------------
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/AirWM/AirWM?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* Martin Rogalla [GitHub](https://github.com/MartinRogalla) / [Twitter](https://twitter.com/MartinRogalla)
-* Harmjan Treep [GitHub](https://github.com/harmjan)
-* Niels Spruit [GitHub](https://github.com/nspruit) / [Twitter](https://twitter.com/n_spruit)
+* Martin Rogalla [GitHub](https://github.com/MartinRogalla/) / [Twitter](https://twitter.com/MartinRogalla)
+* Harmjan Treep [GitHub](https://github.com/harmjan/)
+* Niels Spruit [GitHub](https://github.com/nspruit/) / [Twitter](https://twitter.com/n_spruit)
 
 Build Status
 ------------
@@ -15,11 +15,12 @@ Build Status
 
 Dependencies
 ------------
-* [node-x11](https://github.com/sidorares/node-x11)
+* [node-x11](https://github.com/sidorares/node-x11/)
+* [node-keysym](https://github.com/substack/node-keysym/)
 
 **Testing Environment Dependencies**:
 * [Mocha](http://visionmedia.github.io/mocha/)
-* [should.js](https://github.com/tj/should.js)
+* [should.js](https://github.com/tj/should.js/)
 
 License
 -------
