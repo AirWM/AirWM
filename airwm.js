@@ -141,6 +141,12 @@ var commandHandler = function(command) {
 		case "MoveWindowRight":
 			focus_window.moveRight();
 			break;
+		case "SwitchWorkspaceRight":
+			workspaces.moveRight();
+			break;
+		case "SwitchWorkspaceLeft":
+			workspaces.moveLeft();
+			break;
 		default:
 			break;
 	}
