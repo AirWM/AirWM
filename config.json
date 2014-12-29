@@ -30,6 +30,26 @@
 			"key"      : 28,
 			"modifier" : "super",
 			"command"  : "SwitchTilingMode"
+		},
+		{
+			"key"      : 43,
+			"modifier" : "super",
+			"command"  : "MoveWindowLeft"
+		},
+		{
+			"key"      : 44,
+			"modifier" : "super",
+			"command"  : "MoveWindowDown"
+		},
+		{
+			"key"      : 45,
+			"modifier" : "super",
+			"command"  : "MoveWindowUp"
+		},
+		{
+			"key"      : 46,
+			"modifier" : "super",
+			"command"  : "MoveWindowRight"
 		}
 	]
 }

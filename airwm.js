@@ -16,6 +16,8 @@ var config = require("./config");
 var programs = config.startup_applications
 var keybindings = config.keybindings
 
+var focus_window = null;
+
 x11.createClient(function(err, display) {
 	// Set the connection to the X server in global namespace
 	// as a hack since almost every file uses it
@@ -82,6 +84,11 @@ x11.createClient(function(err, display) {
 	//console.log(ev);
 	if( ev.name === "MapRequest" ) {
 		workspaces.getCurrentWorkspace().addWindow( ev.wid );
+		workspaces.forEachWindow(function(window){
+			if(window.window_id === ev.wid && focus_window === null){
+				focus_window = window;
+			}
+		});
 	} else if ( ev.name === "DestroyNotify" ) {
 		// Just search through all windows and remove the window
 		// that got destroyed out of the tree.
@@ -118,6 +125,18 @@ x11.createClient(function(err, display) {
 							case "SwitchTilingMode":
 								console.log("Switching tiling mode");
 								workspaces.getCurrentWorkspace().switchTilingMode();
+								break;
+							case "MoveWindowLeft":
+								focus_window.moveLeft();
+								break;
+							case "MoveWindowDown":
+								focus_window.moveDown();
+								break;
+							case "MoveWindowUp":
+								focus_window.moveUp();
+								break;
+							case "MoveWindowRight":
+								focus_window.moveRight();
 								break;
 							default:
 								break;
