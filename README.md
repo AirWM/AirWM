@@ -17,6 +17,7 @@ Dependencies
 ------------
 * [node-x11](https://github.com/sidorares/node-x11/)
 * [node-keysym](https://github.com/substack/node-keysym/)
+* [winston](https://github.com/flatiron/winston/)
 
 **Testing Environment Dependencies**:
 * [Mocha](http://visionmedia.github.io/mocha/)
