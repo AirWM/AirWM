@@ -57,17 +57,26 @@ function Workspace( screens ) {
 	this.screens = [];
 
 	for( var i=0; i<screens.length; ++i ) {
-		this.screens.push( new Screen( screens[i] ) );
+		this.screens.push( new Screen( screens[i], this ) );
 	}
 
 	// TODO Store a reference to the windows in a map
 	// so we can do lookups in ~O(1) via window_id
 	//this.window_map = new Map();
 
+	this.toString = function() {
+		var res = "[ Workspace [ ";
+		for( var i=0; i<this.screens.length; ++i ) {
+			res += this.screens[i].toString() + " ";
+		}
+		res += "] ]";
+		return res;
+	}
+
 	this.addWindow = function(window_id) {
 		this.screens[0].addWindow(window_id);
 	}
-	
+
 	this.switchTilingMode = function(){
 		this.screens[0].switchTilingMode();
 	}
@@ -94,31 +103,34 @@ function Workspace( screens ) {
 /**
  * A physical screen in the window manager
  */
-function Screen(screen) {
+function Screen(screen, parent) {
 	this.root_window_id = screen.root;
 	this.width          = screen.pixel_width;
 	this.height         = screen.pixel_height;
 	this.mm_width       = screen.mm_width;
 	this.mm_height      = screen.mm_height;
+	this.parent         = parent;
 
 	// The number of pixels between each screen, should be
 	// about 10mm
 	var margin = parseInt(this.width/this.mm_width * 5);
 
-	this.window_tree = new Container(new Rectangle(margin,margin,this.width-2*margin,this.height-2*margin), null, margin);
+	this.window_tree = new Container(new Rectangle(margin,margin,this.width-2*margin,this.height-2*margin), this, margin);
+
+	this.toString = function() {
+		return "[ Screen " + this.root_window_id + " " + this.window_tree.toString() + " ]";
+	}
 
 	this.addWindow = function( window_id ) {
 		this.window_tree.addWindow(window_id);
 	}
-	
+
 	this.switchTilingMode = function(){
 		this.window_tree.switchTilingMode();
 	}
 
 	this.forEachWindow = function(callback) {
-		if( this.window_tree !== null ) {
-			this.window_tree.forEachWindow(callback);
-		}
+		this.window_tree.forEachWindow(callback);
 	}
 }
 
@@ -131,6 +143,15 @@ function Container(dimensions, parent, margin) {
 	this.parent      = parent;
 	this.margin      = margin;
 	this.children    = [];
+
+	this.toString = function() {
+		var res = "[ Container " + this.tiling_mode + " [ ";
+		for( var i=0; i<this.children.length; ++i ) {
+			res += this.children[i].toString() + " ";
+		}
+		res += "] ]";
+		return res;
+	}
 
 	/**
 	 * Add a window to this container.
@@ -175,7 +196,7 @@ function Container(dimensions, parent, margin) {
 	 * Remove this container if possible
 	 */
 	this.remove = function() {
-		if( this.parent !== null && this.children.length === 0 ) {
+		if( this.parent instanceof Container && this.children.length === 0 ) {
 			this.parent.children.splice(this.parent.children.indexOf(this),1);
 			if( this.parent.children.length === 0 ) {
 				this.parent.remove();
@@ -216,8 +237,12 @@ function Window(window_id, parent) {
 	this.parent     = parent;
 	this.window_id  = window_id;
 
+	this.toString = function() {
+		return "[ Window " + window_id + " ]";
+	}
+
 	/**
-	 * Move a window in a direction.
+	 * Helper function to move a window in a direction.
 	 *
 	 * \param window The window to move.
 	 * \param tiling_mode The tiling mode to move the window in.
@@ -230,16 +255,19 @@ function Window(window_id, parent) {
 		// Walk up the tree untill we find the root container or the container
 		// in which we need to move the window.
 		while(
-		       // Continue while there is a parent container
-		       container.parent !== null &&
-		       // Continue if the current container only contains 1 child
-		       container.children.length !== 1 &&
-		       // Continue if the tiling mode isn't correct
-		       container.tiling_mode !== tiling_mode &&
-		       // Continue if we're moving left and the current window is leftmost in this container
-		       !(direction===0 && container.children.indexOf(previous_container)===0) &&
-		       // Continue if we're moving right and the current window is rightmost in this container
-		       !(direction===1 && container.children.indexOf(previous_container)===container.children.length-1)
+		        // Stop if the parent container isn't a container, this
+		        // means the current container is the root container.
+		        container.parent instanceof Container &&
+		        // Stop if we find a container with the correct tiling mode
+		        !(
+		            container.tiling_mode === tiling_mode &&
+		            // Continue if the container only has 1 child
+		            container.children.length !== 1 &&
+		            // But continue if we can't move the window downwards in that container
+		            !(direction===-1 && container.children.indexOf(previous_container)===0) &&
+		            // And also continue if we can't move the window upwards in that container
+		            !(direction===+1 && container.children.indexOf(previous_container)===container.children.length-1)
+		        )
 		     ) {
 			previous_container = container;
 			container          = container.parent;
@@ -249,32 +277,49 @@ function Window(window_id, parent) {
 			// in the path to the root of the tree try to change the
 			// tiling_mode, if not possible without affecting other
 			// windows create a new root container.
-			if( container.children.length === 1 ) {
+			if( container.children.length === 1 || container.children.length === 2 && container.children.indexOf(previous_container) !== -1 ) {
 				container.tiling_mode = tiling_mode;
 			}
 			else {
-				console.log("No new rooting yet.");
-				return;
+				var new_container = new Container(new Rectangle(container.dimensions.x,container.dimensions.y,container.dimensions.width,container.dimensions.height), container.parent, container.margin );
+				new_container.tiling_mode = tiling_mode;
+				container.parent.window_tree = new_container;
+				new_container.children.push(container);
+
+				previous_container = container;
+				container          = new_container;
 			}
 		}
+		// At this point we should have in the container variable a
+		// container in the correct tiling mode in which to add the
+		// window and in previous_container the container in which the
+		// window currently resides OR the window itself in the case
+		// that the window should be moved directly in it's parent
+		// container.
 
 		// Get the index of the previous container
-		var index = container.children.indexOf(previous_container);
+		var index = container.children.indexOf(previous_container) + direction;
+
 		// Remove the window from it's original position
 		window.remove();
-		// If the previous container doesn't exist anymore
-		if( container.children.indexOf(previous_container) === -1 ) {
-			if( direction === 0 ) direction = -1;
+
+		if( container.children.indexOf(previous_container)!==-1 && direction===-1 ) ++index;
+
+		// If this move would violate container boundaries don't do
+		// anything.
+		var fixed = false
+		if( 0 > index ) { index = 0; fixed = true; }
+		if( container.children.length < index ) { index = container.children.length; fixed = true; }
+
+		var container_index = direction===+1 ? index-1 : index;
+		if( !fixed && container.children[container_index] instanceof Container && previous_container===window ) {
+			container.children[container_index].children.push(window);
+			window.parent = container.children[container_index];
 		}
-		index += direction;
-
-		// Correct if the window would move out of the container
-		if( index < 0 ) index = 0;
-		if( index >= container.children.length ) index = container.children.length;
-
-		// Add the window to the new position
-		container.children.splice(index,0,window);
-		window.parent = container;
+		else {
+			container.children.splice(index,0,window);
+			window.parent = container;
+		}
 
 		// Recalculate the container
 		container.redraw();
@@ -283,10 +328,10 @@ function Window(window_id, parent) {
 	/**
 	 * Move the window in a direction.
 	 */
-	this.moveLeft  = function() { move(this,"horizontal",0); }
-	this.moveRight = function() { move(this,"horizontal",1); }
-	this.moveUp    = function() { move(this,"vertical",  0); }
-	this.moveDown  = function() { move(this,"vertical",  1); }
+	this.moveLeft  = function() { move(this,"horizontal",-1); }
+	this.moveRight = function() { move(this,"horizontal",+1); }
+	this.moveUp    = function() { move(this,"vertical",  -1); }
+	this.moveDown  = function() { move(this,"vertical",  +1); }
 
 	/**
 	 * Show this window, tell X to draw it.
