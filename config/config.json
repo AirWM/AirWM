@@ -32,6 +32,16 @@
 			"command"  : "SwitchTilingMode"
 		},
 		{
+			"key"      : "b",
+			"modifier" : "super",
+			"command"  : "SwitchWorkspaceLeft"
+		},
+		{
+			"key"      : "f",
+			"modifier" : "super",
+			"command"  : "SwitchWorkspaceRight"
+		},
+		{
 			"key"      : "h",
 			"modifier" : "super",
 			"command"  : "MoveWindowLeft"
