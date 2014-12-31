@@ -295,28 +295,41 @@ function Window(window_id, parent) {
 		// window and in previous_container the container in which the
 		// window currently resides OR the window itself in the case
 		// that the window should be moved directly in it's parent
-		// container.
+		// container
 
 		// Get the index of the previous container
 		var index = container.children.indexOf(previous_container) + direction;
 
-		// Remove the window from it's original position
+		// Remove the window from it's original position, this also
+		// removes all containers above it that would otherwise become
+		// empty because of this.
 		window.remove();
 
+		// If this removes the previous container we have to adjust
+		// the index
 		if( container.children.indexOf(previous_container)!==-1 && direction===-1 ) ++index;
 
-		// If this move would violate container boundaries don't do
-		// anything.
+		// If this move would violate container boundaries fix the
+		// index variable and make a note of that in the fixed
+		// variable so we know that we are just putting the window
+		// back and don't accidentally place it in a container next
+		// to it.
 		var fixed = false
 		if( 0 > index ) { index = 0; fixed = true; }
 		if( container.children.length < index ) { index = container.children.length; fixed = true; }
 
+		// The index of the neigbor is different from the insertion index
+		// if we are moving further into the array.
 		var container_index = direction===+1 ? index-1 : index;
 		if( !fixed && container.children[container_index] instanceof Container && previous_container===window ) {
+			// If we are moving the window past a container on the same level
+			// as the window move the window inside of that container instead
+			// of past it.
 			container.children[container_index].children.push(window);
 			window.parent = container.children[container_index];
 		}
 		else {
+			// Otherwise add the window at the index position
 			container.children.splice(index,0,window);
 			window.parent = container;
 		}
