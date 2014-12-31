@@ -196,7 +196,7 @@ function Container(dimensions, parent, margin) {
 	 * Remove this container if possible
 	 */
 	this.remove = function() {
-		if( this.parent instanceof Container && this.children.length === 0 ) {
+		if( this.parent instanceof Container ) {
 			this.parent.children.splice(this.parent.children.indexOf(this),1);
 			if( this.parent.children.length === 0 ) {
 				this.parent.remove();
@@ -282,8 +282,9 @@ function Window(window_id, parent) {
 			}
 			else {
 				var new_container = new Container(new Rectangle(container.dimensions.x,container.dimensions.y,container.dimensions.width,container.dimensions.height), container.parent, container.margin );
-				new_container.tiling_mode = tiling_mode;
+				new_container.tiling_mode    = tiling_mode;
 				container.parent.window_tree = new_container;
+				container.parent             = new_container;
 				new_container.children.push(container);
 
 				previous_container = container;
