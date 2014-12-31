@@ -65,11 +65,11 @@ function Workspace( screens ) {
 	//this.window_map = new Map();
 
 	this.toString = function() {
-		var res = "[ Workspace [ ";
+		var res = "{ Workspace [ ";
 		for( var i=0; i<this.screens.length; ++i ) {
 			res += this.screens[i].toString() + " ";
 		}
-		res += "] ]";
+		res += "] }";
 		return res;
 	}
 
@@ -118,7 +118,7 @@ function Screen(screen, parent) {
 	this.window_tree = new Container(new Rectangle(margin,margin,this.width-2*margin,this.height-2*margin), this, margin);
 
 	this.toString = function() {
-		return "[ Screen " + this.root_window_id + " " + this.window_tree.toString() + " ]";
+		return "{ Screen " + this.root_window_id + " " + this.window_tree.toString() + " }";
 	}
 
 	this.addWindow = function( window_id ) {
@@ -145,11 +145,11 @@ function Container(dimensions, parent, margin) {
 	this.children    = [];
 
 	this.toString = function() {
-		var res = "[ Container " + this.tiling_mode + " [ ";
+		var res = "{ Container " + this.tiling_mode + " [ ";
 		for( var i=0; i<this.children.length; ++i ) {
 			res += this.children[i].toString() + " ";
 		}
-		res += "] ]";
+		res += "] }";
 		return res;
 	}
 
@@ -238,7 +238,7 @@ function Window(window_id, parent) {
 	this.window_id  = window_id;
 
 	this.toString = function() {
-		return "[ Window " + window_id + " ]";
+		return "{ Window " + window_id + " }";
 	}
 
 	/**
