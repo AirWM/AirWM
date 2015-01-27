@@ -60,6 +60,26 @@
 			"key"      : "l",
 			"modifier" : "super",
 			"command"  : "MoveWindowRight"
+		},
+		{
+			"key"      : "h",
+			"modifier" : "alt",
+			"command"  : "MoveFocusLeft"
+		},
+		{
+			"key"      : "j",
+			"modifier" : "alt",
+			"command"  : "MoveFocusDown"
+		},
+		{
+			"key"      : "k",
+			"modifier" : "alt",
+			"command"  : "MoveFocusUp"
+		},
+		{
+			"key"      : "l",
+			"modifier" : "alt",
+			"command"  : "MoveFocusRight"
 		}
 	]
 }
