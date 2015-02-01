@@ -8,77 +8,77 @@
 	"keybindings" : [
 		{
 			"key"      : "d",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"program"  : "dmenu_run"
 		},
 		{
 			"key"      : "Return",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"program"  : "xterm"
 		},
 		{
 			"key"      : "w",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"command"  : "CloseWindow"
 		},
 		{
 			"key"      : "q",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"command"  : "Shutdown"
 		},
 		{
 			"key"      : "t",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"command"  : "SwitchTilingMode"
 		},
 		{
 			"key"      : "b",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"command"  : "SwitchWorkspaceLeft"
 		},
 		{
 			"key"      : "f",
-			"modifier" : "super",
+			"modifier" : ["super"],
 			"command"  : "SwitchWorkspaceRight"
 		},
 		{
 			"key"      : "h",
-			"modifier" : "super",
+			"modifier" : ["super","shift"],
 			"command"  : "MoveWindowLeft"
 		},
 		{
 			"key"      : "j",
-			"modifier" : "super",
+			"modifier" : ["super","shift"],
 			"command"  : "MoveWindowDown"
 		},
 		{
 			"key"      : "k",
-			"modifier" : "super",
+			"modifier" : ["super","shift"],
 			"command"  : "MoveWindowUp"
 		},
 		{
 			"key"      : "l",
-			"modifier" : "super",
+			"modifier" : ["super","shift"],
 			"command"  : "MoveWindowRight"
 		},
 		{
 			"key"      : "h",
-			"modifier" : "alt",
+			"modifier" : ["super"],
 			"command"  : "MoveFocusLeft"
 		},
 		{
 			"key"      : "j",
-			"modifier" : "alt",
+			"modifier" : ["super"],
 			"command"  : "MoveFocusDown"
 		},
 		{
 			"key"      : "k",
-			"modifier" : "alt",
+			"modifier" : ["super"],
 			"command"  : "MoveFocusUp"
 		},
 		{
 			"key"      : "l",
-			"modifier" : "alt",
+			"modifier" : ["super"],
 			"command"  : "MoveFocusRight"
 		}
 	]
