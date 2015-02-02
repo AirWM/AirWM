@@ -14,7 +14,7 @@
 	"private": "true",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"x11": "1.0.1",
+		"x11": "1.0.2",
 		"keysym": "0.0.6",
 		"winston": "0.8.3"
 	},
