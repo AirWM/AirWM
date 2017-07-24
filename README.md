@@ -20,7 +20,7 @@ Dependencies
 * [winston](https://github.com/flatiron/winston/)
 
 **Testing Environment Dependencies**:
-* [Mocha](http://visionmedia.github.io/mocha/)
+* [Mocha](http://mochajs.org/)
 * [should.js](https://github.com/tj/should.js/)
 
 License
